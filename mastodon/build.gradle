@@ -6,7 +6,7 @@ plugins {
 android {
 	compileSdk 31
 	defaultConfig {
-		applicationId "org.joinmastodon.android"
+		applicationId "xyz.moddedbear.mastodon"
 		minSdk 23
 		targetSdk 31
 		versionCode 39

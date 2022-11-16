@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.joinmastodon.android.GlobalUserPreferences;
 import org.joinmastodon.android.R;
 import org.joinmastodon.android.api.session.AccountSessionManager;
 import org.joinmastodon.android.fragments.BaseStatusListFragment;
@@ -82,9 +83,9 @@ public class FooterStatusDisplayItem extends StatusDisplayItem{
 
 		@Override
 		public void onBind(FooterStatusDisplayItem item){
-			bindButton(reply, item.status.repliesCount);
-			bindButton(boost, item.status.reblogsCount);
-			bindButton(favorite, item.status.favouritesCount);
+			bindButton(reply, item.status.repliesCount, true);
+			bindButton(boost, item.status.reblogsCount, false);
+			bindButton(favorite, item.status.favouritesCount, false);
 			boost.setSelected(item.status.reblogged);
 			favorite.setSelected(item.status.favourited);
 			boost.setEnabled(item.status.visibility==StatusPrivacy.PUBLIC || item.status.visibility==StatusPrivacy.UNLISTED
@@ -92,9 +93,31 @@ public class FooterStatusDisplayItem extends StatusDisplayItem{
 		}
 
 		private void bindButton(TextView btn, int count){
-			if(count>0 && !item.hideCounts){
+			if(count>0 && !item.hideCounts) {
 				btn.setText(DecimalFormat.getIntegerInstance().format(count));
 				btn.setCompoundDrawablePadding(V.dp(8));
+			}else{
+				btn.setText("");
+				btn.setCompoundDrawablePadding(0);
+			}
+		}
+
+		private void bindButton(TextView btn, int count, boolean approximate){
+			if(count>0 && !item.hideCounts) {
+				if(!GlobalUserPreferences.hidePostStats) {
+					btn.setText(DecimalFormat.getIntegerInstance().format(count));
+					btn.setCompoundDrawablePadding(V.dp(8));
+				}else if (approximate){
+					if(count==1) {
+						btn.setText("1");
+					}else {
+						btn.setText("1+");
+					}
+					btn.setCompoundDrawablePadding(V.dp(8));
+				}else{
+					btn.setText("");
+					btn.setCompoundDrawablePadding(0);
+				}
 			}else{
 				btn.setText("");
 				btn.setCompoundDrawablePadding(0);
@@ -111,13 +134,13 @@ public class FooterStatusDisplayItem extends StatusDisplayItem{
 		private void onBoostClick(View v){
 			AccountSessionManager.getInstance().getAccount(item.accountID).getStatusInteractionController().setReblogged(item.status, !item.status.reblogged);
 			boost.setSelected(item.status.reblogged);
-			bindButton(boost, item.status.reblogsCount);
+			bindButton(boost, item.status.reblogsCount, false);
 		}
 
 		private void onFavoriteClick(View v){
 			AccountSessionManager.getInstance().getAccount(item.accountID).getStatusInteractionController().setFavorited(item.status, !item.status.favourited);
 			favorite.setSelected(item.status.favourited);
-			bindButton(favorite, item.status.favouritesCount);
+			bindButton(favorite, item.status.favouritesCount, false);
 		}
 
 		private void onShareClick(View v){

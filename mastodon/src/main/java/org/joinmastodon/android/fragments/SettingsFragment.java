@@ -95,6 +95,12 @@ public class SettingsFragment extends MastodonToolbarFragment{
 		items.add(new SwitchItem(R.string.notify_reblog, R.drawable.ic_fluent_arrow_repeat_all_24_regular, pushSubscription.alerts.reblog, i->onNotificationsChanged(PushNotification.Type.REBLOG, i.checked)));
 		items.add(new SwitchItem(R.string.notify_mention, R.drawable.ic_at_symbol, pushSubscription.alerts.mention, i->onNotificationsChanged(PushNotification.Type.MENTION, i.checked)));
 
+		items.add(new HeaderItem(R.string.wellbeing));
+		items.add(new SwitchItem(R.string.wellbeing_hide_post_stats, R.drawable.ic_fluent_poll_24_regular, GlobalUserPreferences.hidePostStats, i->{
+			GlobalUserPreferences.hidePostStats=i.checked;
+			GlobalUserPreferences.save();
+		}));
+
 		items.add(new HeaderItem(R.string.settings_boring));
 		items.add(new TextItem(R.string.settings_account, ()->UiUtils.launchWebBrowser(getActivity(), "https://"+session.domain+"/auth/edit")));
 		items.add(new TextItem(R.string.settings_contribute, ()->UiUtils.launchWebBrowser(getActivity(), "https://github.com/mastodon/mastodon-android")));
