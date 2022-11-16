@@ -1,3 +1,16 @@
+# moddedBear's Mastodon for Android Fork
+
+## Changes from upstream
+- Added an option to hide post stats (i.e. reply counts above one, favorite counts, boost counts).
+- Renamed reblogs to boosts
+- Changed package name
+
+To build, switch to a "vx.x.x-wellbeing" branch and follow the original build instructions.
+
+Original readme below.
+
+---
+
 # Mastodon for Android
 [![Crowdin](https://badges.crowdin.net/mastodon-for-android/localized.svg)](https://crowdin.com/project/mastodon-for-android)
 
